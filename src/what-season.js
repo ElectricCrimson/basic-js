@@ -13,17 +13,20 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 function getSeason(date) {
   if (!date) {
-    const str = 'Unable to determine the time of year!';
-    return str;
-  } else {
-    if (date instanceof Date) {
-      const month = date.getMonth();
-      const season = (month <= 1 || month === 11) ? 'winter' : 
-      month <= 4 ? 'spring' : month <= 7 ? 'summer' : 'autumn';
-      return season;
-    } else {
+    return 'Unable to determine the time of year!';
+  }
+  if (date[Symbol.toStringTag]) throw new Error ('Invalid date!');
+  if (date instanceof Date) {
+    if (date.hasOwnProperty('getMonth')) {
       throw new Error ('Invalid date!');
-    }
+    };
+
+    const month = date.getMonth();
+    const season = (month <= 1 || month === 11) ? 'winter' : 
+    month <= 4 ? 'spring' : month <= 7 ? 'summer' : 'autumn';
+    return season;
+  } else {
+    throw new Error ('Invalid date!');
   }
 }
 
